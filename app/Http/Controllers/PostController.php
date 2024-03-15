@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BlogPosted;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -20,15 +23,17 @@ class PostController extends Controller
         // Query Builder start
         // $posts = DB::table("posts")->select('id', 'title', 'content', 'created_at', 'updated_at')->where('active', true)->get();
         // Query Builder end
-
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         // Eloquent start
         $posts = Post::active()->get();
         // $posts = Post::active()->withTrashed()->get();
         // Eloquent end
 
-
         $viewData = [
-            "posts" => $posts
+            "posts" => $posts,
+            "user" => Auth::user()["name"]
         ];
         return view("posts.index", $viewData);
     }
@@ -39,6 +44,9 @@ class PostController extends Controller
     public function create()
     {
         //
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         return view("posts.create");
     }
 
@@ -47,6 +55,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         $title = $request->input("title");
         $content = $request->input("content");
 
@@ -83,6 +94,8 @@ class PostController extends Controller
 
         // Storage::write('posts.txt', $posts);
 
+        Mail::to("inti@gmail.com")->send(new BlogPosted);
+
         return redirect('posts');
     }
 
@@ -91,6 +104,9 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         $selectedPost = Post::where('id', "=", $id)->first();
 
         $comments = $selectedPost->comments()->get();
@@ -122,7 +138,9 @@ class PostController extends Controller
     public function edit(string $id)
     {
         //
-
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         $post = Post::where('id', '=', $id)->first();
         $viewData = [
             "post" => $post
@@ -136,6 +154,9 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         $title = $request->input("title");
         $content = $request->input("content");
 
@@ -154,6 +175,9 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!Auth::check()) {
+            return redirect("login");
+        }
         Post::where('id', $id)->delete();
 
         return redirect("posts");

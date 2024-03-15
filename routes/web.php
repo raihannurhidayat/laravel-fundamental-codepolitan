@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
@@ -21,6 +22,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// routes Auth Start
+Route::get("/logout", [AuthController::class, "logout"]);
+
+Route::get("/login", [AuthController::class, "login"]);
+Route::post("/login", [AuthController::class, "authenticate"]);
+
+Route::get("/register", [AuthController::class, "register"]);
+Route::post("/register", [AuthController::class, "createUser"]);
+// routes Auth end
 Route::get("posts", [PostController::class, 'index']);
 Route::get('posts/create', [PostController::class, 'create']);
 Route::post('posts', [PostController::class, 'store']);

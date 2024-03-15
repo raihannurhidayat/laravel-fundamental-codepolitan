@@ -6,6 +6,7 @@
     <h1 class="">Blog Ready
         <a href="{{ url('posts/create') }}" class="btn btn-success">+ Buat Postingan</a>
     </h1>
+    <h5 class="my-4">Welcome {{ $user }}</h5>
     @foreach ($posts as $post)
         <div class="card mb-3">
             <div class="card-body">
