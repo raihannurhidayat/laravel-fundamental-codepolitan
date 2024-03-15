@@ -14,12 +14,15 @@ class BlogPosted extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $post;
+
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($post)
     {
-        //
+        $this->post = $post;
     }
 
     /**
@@ -29,7 +32,7 @@ class BlogPosted extends Mailable
     {
         return new Envelope(
             from: new Address("cuyuniv@gmail.com", "raihan"),
-            subject: 'Blog Posted',
+            subject: "Blog Posted: {$this->post->title}",
         );
     }
 
@@ -40,6 +43,9 @@ class BlogPosted extends Mailable
     {
         return new Content(
             view: 'mails.blog_posted',
+            with: [
+                'post' => $this->post,
+            ]
         );
     }
 

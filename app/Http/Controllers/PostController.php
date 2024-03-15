@@ -71,7 +71,7 @@ class PostController extends Controller
         // query builder end
 
         // eloquent start
-        Post::create([
+        $post = Post::create([
             'title' => $title,
             'content' => $content,
         ]);
@@ -94,7 +94,7 @@ class PostController extends Controller
 
         // Storage::write('posts.txt', $posts);
 
-        Mail::to("inti@gmail.com")->send(new BlogPosted);
+        Mail::to(Auth::user()['email'])->send(new BlogPosted($post));
 
         return redirect('posts');
     }
