@@ -43,8 +43,8 @@ Route::delete("posts/{id}", [PostController::class, "destroy"]);
 // Product Routes
 Route::get("/products", [ProductController::class, "index"]);
 Route::post("/products", [ProductController::class, "store"]);
-Route::get("products/{id}", [ProductController::class, "show"]);
 Route::get("/products/add", [ProductController::class, "create"]);
+Route::get("products/{id}", [ProductController::class, "show"]);
 Route::get("products/edit/{id}", [ProductController::class, "edit"]);
 Route::patch("products/edit/{id}", [ProductController::class, "update"]);
 Route::delete("/products/{id}", [ProductController::class, "destroy"]);
